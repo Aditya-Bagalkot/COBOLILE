@@ -1,0 +1,54 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. ACCNT301.
+
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01  WSCC-DELETE      PIC X(01) VALUE 'D'.
+       01  WSCC-ENQUIRY     PIC X(01) VALUE 'I'.
+       01  WSCC-UPDATE      PIC X(01) VALUE 'U'.
+       01  WSAA-ACCNTTYP    PIC X(10).
+       01  WSAA-ACCNTBAL    PIC S9(13)V99 COMP-3.
+       01  WSAA-CURRCD      PIC X(03).
+       01  WSAA-CUSTID      PIC X(10).
+       01  WSAA-ACCNTSTA    PIC X(01).
+       01  WSAA-OPENDATE    PIC X(10).
+       01  WSAA-LASTUPD     PIC X(26).
+
+       LINKAGE SECTION.
+       01  LSAA-ACTION      PIC X(01).
+       01  LSAA-ACCNTNBR    PIC X(10).
+       01  LSAA-ACCNTSTS    PIC X(01).
+
+       PROCEDURE DIVISION USING  LSAA-ACTION
+                                 LSAA-ACCNTNBR
+                                 LSAA-ACCNTSTS.
+
+*******
+*******  Call Procedure for Account Enquiry
+*******
+           IF FUNCTION UPPER-CASE(LSAA-ACTION) = WSCC-ENQUIRY
+              CALL LINKAGE TYPE IS PROCEDURE   "ACCNT401" USING
+                                               LSAA-ACCNTNBR
+           END-IF.
+
+*******
+*******  Call Procedure for Account Update
+*******
+           IF FUNCTION UPPER-CASE(LSAA-ACTION) = WSCC-UPDATE
+              CALL LINKAGE TYPE IS PROCEDURE   "ACCNT402" USING
+                                               LSAA-ACCNTNBR
+                                               LSAA-ACCNTSTS
+           END-IF.
+
+*******
+*******  Call Procedure for Account Delete
+*******
+           IF FUNCTION UPPER-CASE(LSAA-ACTION) = WSCC-DELETE
+              CALL LINKAGE TYPE IS PROCEDURE   "ACCNT403" USING
+                                               LSAA-ACCNTNBR
+           END-IF.
+
+           STOP RUN.
