@@ -37,6 +37,7 @@
 *******
 *******  Call Procedure for Account Update
 *******
+*******
            IF FUNCTION UPPER-CASE(LSAA-ACTION) = WSCC-UPDATE
               CALL LINKAGE TYPE IS PROCEDURE   "ACCNT402" USING
                                                LSAA-ACCNTNBR
